@@ -1,164 +1,95 @@
-Production Approach (Recommended)
+# AI-Powered Industrial Electrical Diagnostics and Predictive Maintenance Platform
 
-Don't run LSTM on every message.
+## Project Description
 
-Run Isolation Forest for every telemetry message:
+The AI-Powered Industrial Electrical Diagnostics and Predictive Maintenance Platform is an on-premises intelligent monitoring solution designed to continuously collect, analyze, and diagnose electrical equipment data from industrial environments. The system integrates real-time telemetry from devices such as circuit breakers, power meters, gateways, transformers, and sensors using industrial communication protocols including Modbus TCP and Modbus RTU.
 
-1 second
-2 seconds
-3 seconds
-...
+The platform combines traditional rule-based monitoring with advanced machine learning algorithms to detect abnormal operating conditions, predict potential equipment failures, and provide actionable diagnostic recommendations. By leveraging anomaly detection models such as Isolation Forest and LSTM Autoencoders, the system can identify both sudden faults and gradual degradation patterns before they result in unplanned downtime.
 
-Run LSTM periodically:
+To enhance troubleshooting capabilities, the solution incorporates a Retrieval-Augmented Generation (RAG) framework powered by locally hosted Large Language Models (LLMs) through Ollama. Technical manuals, maintenance procedures, historical incident reports, and service documentation are indexed in a vector database, enabling the platform to retrieve relevant knowledge and generate context-aware root cause analysis and corrective actions.
 
-Every 5 minutes
-or
-Every 15 minutes
+The platform is fully deployable within a secure industrial network without requiring cloud connectivity. All telemetry processing, machine learning inference, model management, vector search, and AI-based diagnostics operate locally, ensuring data privacy, cybersecurity compliance, and low-latency decision making.
 
-using a scheduled job.
+Model lifecycle management is handled through [MLflow](https://mlflow.org?utm_source=chatgpt.com), enabling version control, experiment tracking, model registration, and deployment management. The solution supports continuous learning by incorporating historical operational data and maintenance outcomes to improve diagnostic accuracy over time.
 
-Example:
+The system provides operators and maintenance engineers with a centralized dashboard for real-time monitoring, anomaly alerts, diagnostic insights, equipment health assessment, and maintenance recommendations, helping organizations improve asset reliability, reduce operational costs, minimize downtime, and transition from reactive to predictive maintenance strategies.
 
-from apscheduler.schedulers.background import BackgroundScheduler
+---
 
-scheduler = BackgroundScheduler()
+## Key Objectives
 
-scheduler.add_job(
-    run_lstm_analysis,
-    "interval",
-    minutes=5
-)
+* Monitor industrial electrical assets in real time.
+* Detect abnormal equipment behavior using AI/ML models.
+* Predict potential failures before breakdowns occur.
+* Generate automated root-cause analysis and troubleshooting recommendations.
+* Leverage technical documentation through RAG-based knowledge retrieval.
+* Maintain complete data sovereignty through on-premises deployment.
+* Track and manage machine learning models using MLOps practices.
+* Improve equipment reliability, availability, and maintenance efficiency.
 
-scheduler.start()
+---
 
+## Core Capabilities
 
+### Real-Time Data Acquisition
 
-For your architecture (RabbitMQ → PostgreSQL → Isolation Forest → LSTM → RCA), telemetry_consumer.py should:
+* Modbus TCP
+* Modbus RTU (RS485)
+* Sensor telemetry ingestion
+* Device health monitoring
 
-Read telemetry messages from RabbitMQ
-Save telemetry to PostgreSQL
-Run Isolation Forest anomaly detection
-Load last 60 records for the device
-Run LSTM degradation detection (when enough history exists)
-Calculate health score
-Save ML results
-Send results to RCA engine
+### Anomaly Detection
 
+* Isolation Forest for outlier detection
+* LSTM Autoencoder for degradation detection
+* Statistical threshold monitoring
+* Rule-based fault detection
 
-https://chatgpt.com/c/6a23ead7-6490-8324-8c67-1718ebbc2f4d
+### Predictive Maintenance
 
+* Equipment health scoring
+* Failure trend analysis
+* Remaining useful life indicators
+* Early warning alerts
 
-Telemetry
-    │
-    ▼
-Isolation Forest
-    │
-    ▼
-LSTM Autoencoder
-    │
-    ▼
-Root Cause Engine
-    │
-    ▼
-RAG Service
-    │
-    ▼
-Ollama
-    │
-    ▼
-Troubleshooting Recommendations
+### AI-Powered Diagnostics
 
+* Root cause analysis
+* Fault classification
+* Maintenance recommendations
+* Historical incident correlation
 
-Example Prompt Sent to Ollama
-Root Cause:
-Thermal Overload
+### RAG-Based Knowledge Assistant
 
-Voltage:
-415
+* PDF manual ingestion
+* SOP and maintenance document indexing
+* Semantic search using vector embeddings
+* Context-aware diagnostics using local LLMs
 
-Current:
-145
+### MLOps
 
-Temperature:
-92
+* Model versioning
+* Experiment tracking
+* Automated model deployment
+* Performance monitoring
 
-Humidity:
-84
+### Reporting and Alerts
 
-Manual Context:
+* Critical fault notifications
+* Equipment health dashboards
+* Diagnostic reports
+* Audit and maintenance history
 
-Check terminal connections.
+---
 
-Inspect connected load.
+## Business Benefits
 
-Verify breaker rating.
-Example Ollama Response
-{
-  "risk":"HIGH",
+* Reduce unplanned equipment downtime.
+* Improve operational reliability and safety.
+* Accelerate troubleshooting and maintenance activities.
+* Preserve expert knowledge through AI-assisted diagnostics.
+* Lower maintenance costs through predictive interventions.
+* Ensure secure, on-premises operation without cloud dependency.
+* Support digital transformation initiatives in industrial environments.
 
-  "root_cause_summary":
-  "Breaker is operating above rated load causing thermal stress.",
-
-  "recommended_actions":[
-    "Inspect connected loads",
-    "Verify breaker sizing",
-    "Check cable terminations"
-  ],
-
-  "immediate_actions":[
-    "Reduce load immediately"
-  ],
-
-  "maintenance_plan":[
-    "Thermal inspection",
-    "Torque verification",
-    "Breaker testing"
-  ]
-}
-
-
-Solution architecture
-
-Modbus Gateway
-      │
-      ▼
-RabbitMQ
-      │
-      ▼
-Telemetry Consumer
-      │
-      ▼
-Isolation Forest
-      │
-      ▼
-LSTM Autoencoder
-      │
-      ▼
-Root Cause Engine
-      │
-      ▼
-ChromaDB
-      │
-      ▼
-RAG Retrieval
-      │
-      ▼
-Ollama (Llama3)
-      │
-      ▼
-Recommendations
-      │
-      ▼
-PostgreSQL/TimescaleDB
-      │
-      ▼
-FastAPI
-      │
-      ▼
-Grafana / Dashboard
-
-
-Sample RAG Query 
-curl --location 'http://localhost:8000/ask-agent' \
---header 'Content-Type: application/json' \
---data '{ "data": "How to Maintain MicroLogic Control Unit" }'
+This project delivers an end-to-end intelligent diagnostics ecosystem that combines Industrial IoT, Machine Learning, MLOps, Vector Search, and Generative AI to provide proactive monitoring and decision support for electrical infrastructure and industrial assets.

@@ -1,0 +1,17 @@
+pymodbus==3.6.9
+asyncio
+pika
+psycopg2
+psycopg2-binary
+scikit-learn 
+joblib 
+pandas
+tensorflow  # requires Python <=3.12; current venv is 3.14
+fastapi
+uvicorn[standard]
+chromadb
+pypdf
+sentence-transformers
+python-dotenv
+mlflow
+streamlit

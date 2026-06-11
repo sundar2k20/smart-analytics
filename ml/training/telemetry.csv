@@ -1,0 +1,4 @@
+timestamp,voltage,current,power_factor,frequency,temperature,humidity
+2026-01-01 00:00:00,415,75,0.95,50,32,45
+2026-01-01 00:01:00,416,76,0.94,50,33,44
+2026-01-01 00:02:00,414,77,0.95,50,32,45

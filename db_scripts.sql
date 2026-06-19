@@ -1,1 +1,131 @@
-test
+-- Table: public.device_profile
+
+-- DROP TABLE IF EXISTS public.device_profile;
+
+CREATE TABLE IF NOT EXISTS public.device_profile
+(
+    device_id character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    device_type character varying(50) COLLATE pg_catalog."default",
+    min_voltage numeric,
+    max_voltage numeric,
+    min_current numeric,
+    max_current numeric,
+    min_frequency numeric,
+    max_frequency numeric,
+    min_power_factor numeric,
+    max_power_factor numeric,
+    min_temperature numeric,
+    max_temperature numeric,
+    min_humidity numeric,
+    max_humidity numeric,
+    created_at timestamp without time zone DEFAULT now(),
+    rated_voltage numeric,
+    rated_current numeric,
+    warning_temperature numeric,
+    critical_temperature numeric,
+    manufacturer character varying(100) COLLATE pg_catalog."default",
+    model_number character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT device_profile_pkey PRIMARY KEY (device_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.device_profile
+    OWNER to postgres;
+
+
+-- Table: public.device_training_data
+
+-- DROP TABLE IF EXISTS public.device_training_data;
+
+CREATE TABLE IF NOT EXISTS public.device_training_data
+(
+    id bigint NOT NULL DEFAULT nextval('device_training_data_id_seq'::regclass),
+    device_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    device_type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    voltage numeric(10,2),
+    current numeric(10,2),
+    frequency numeric(10,2),
+    power_factor numeric(5,3),
+    temperature numeric(10,2),
+    humidity numeric(10,2),
+    status character varying(20) COLLATE pg_catalog."default" DEFAULT 'NORMAL'::character varying,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT device_training_data_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.device_training_data
+    OWNER to postgres;
+-- Index: idx_training_created_at
+
+-- DROP INDEX IF EXISTS public.idx_training_created_at;
+
+CREATE INDEX IF NOT EXISTS idx_training_created_at
+    ON public.device_training_data USING btree
+    (created_at ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: idx_training_device_id
+
+-- DROP INDEX IF EXISTS public.idx_training_device_id;
+
+CREATE INDEX IF NOT EXISTS idx_training_device_id
+    ON public.device_training_data USING btree
+    (device_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Table: public.ml_models
+
+-- DROP TABLE IF EXISTS public.ml_models;
+
+CREATE TABLE IF NOT EXISTS public.ml_models
+(
+    model_id integer NOT NULL DEFAULT nextval('ml_models_model_id_seq'::regclass),
+    device_id character varying(100) COLLATE pg_catalog."default",
+    model_type character varying(50) COLLATE pg_catalog."default",
+    trained_on timestamp without time zone,
+    sample_count integer,
+    model_path text COLLATE pg_catalog."default",
+    accuracy numeric,
+    scaler_path text COLLATE pg_catalog."default",
+    CONSTRAINT ml_models_pkey PRIMARY KEY (model_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.ml_models
+    OWNER to postgres;
+
+
+-- Table: public.telemetry
+
+-- DROP TABLE IF EXISTS public.telemetry;
+
+CREATE TABLE IF NOT EXISTS public.telemetry
+(
+    id bigint NOT NULL DEFAULT nextval('telemetry_id_seq'::regclass),
+    device_id character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    ts timestamp with time zone NOT NULL,
+    voltage double precision,
+    current double precision,
+    power double precision,
+    frequency double precision,
+    power_factor double precision,
+    temperature double precision,
+    humidity double precision,
+    anomaly boolean,
+    anomaly_score double precision,
+    health_score double precision,
+    root_cause text COLLATE pg_catalog."default",
+    created_at timestamp with time zone DEFAULT now(),
+    recommendation_json jsonb,
+    CONSTRAINT telemetry_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.telemetry
+    OWNER to postgres;
+

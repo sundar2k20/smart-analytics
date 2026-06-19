@@ -63,7 +63,7 @@ The system provides operators and maintenance engineers with a centralized dashb
 
 * PDF manual ingestion
 * SOP and maintenance document indexing
-* Semantic search using vector embeddings
+* Hybrid search with BM25 + Semantic search using vector embeddings
 * Context-aware diagnostics using local LLMs
 
 ### MLOps

@@ -18,8 +18,13 @@ DEFAULT_PERSIST_DIR = Path(
     )
 )
 DEFAULT_COLLECTION = os.environ.get("CHROMA_COLLECTION", "equipment_manuals")
+# DEFAULT_EMBEDDING_MODEL = os.environ.get(
+#     "EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
+# )
+
 DEFAULT_EMBEDDING_MODEL = os.environ.get(
-    "EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
+    "EMBEDDING_MODEL",
+    "nomic-embed-text"
 )
 
 

@@ -90,13 +90,13 @@ $env:POSTGRES_MLFLOW_PASSWORD = 'Sanadiv@123'
                  "--default-artifact-root 'file:///$artifactRoot' " +
                  "--host 127.0.0.1 --port 5000"
 
-    Start-AnalyticsWindow `
-        -Title 'MLflow Server (Postgres)' `
-        -WorkingDirectory $ProjectRoot `
-        -Command $mlflowCmd
+    # Start-AnalyticsWindow `
+    #     -Title 'MLflow Server (Postgres)' `
+    #     -WorkingDirectory $ProjectRoot `
+    #     -Command $mlflowCmd
 
-    # Give MLflow a moment to bind its port before downstream producers start logging.
-    Start-Sleep -Seconds 10
+    # # Give MLflow a moment to bind its port before downstream producers start logging.
+    # Start-Sleep -Seconds 10
 
 
 Start-AnalyticsWindow `

@@ -56,6 +56,8 @@ MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 conn = psycopg2.connect(**get_db_config())
 
+print(mlflow.get_tracking_uri())
+
 # Ensure the ml_models table exists, then self-heal the schema by adding
 # any optional columns that newer versions of this script depend on. Both
 # statements are idempotent (IF NOT EXISTS) so they're safe to re-run.
@@ -159,6 +161,7 @@ for device_id in device_ids:
             artifact_path="model"
         )
 
+    print(model_info)
     model_uri = model_info.model_uri
     registered_name = f"{device_id}_{model_type}"
 
@@ -214,16 +217,14 @@ for device_id in device_ids:
                 model_type,
                 trained_on,
                 sample_count,
-                model_path,
-                scaler_path
-            ) VALUES (%s, %s, NOW(), %s, %s, %s)
+                model_path
+            ) VALUES (%s, %s, NOW(), %s, %s)
             """,
             (
                 device_id,
                 "isolation_forest",
                 len(df),
-                str(model_path),
-                str(scaler_path)
+                str(model_path)
             )
         )
         conn.commit()
